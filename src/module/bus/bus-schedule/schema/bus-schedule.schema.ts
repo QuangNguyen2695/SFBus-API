@@ -1,0 +1,29 @@
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Types, Document } from 'mongoose';
+
+export class BusScheduleBreakPointsTimeDocument extends Document {
+    @Prop({ required: true, ref: 'bus_stations' })
+    busStationId: Types.ObjectId
+    timeSchedule: Date
+}
+
+export class BusScheduleStatusDocument extends Document {
+    @Prop({ required: true, enum: ['scheduled', 'in_progress', 'completed', 'cancelled'], default: 'scheduled' })
+    type: String
+}
+
+@Schema({ collection: 'bus_schedules', timestamps: true },)
+export class BusScheduleDocument extends Document {
+
+    @Prop({ required: true, ref: 'buses' })
+    busId: Types.ObjectId
+
+    @Prop({ required: true, ref: 'bus_routes' })
+    busRouteId: Types.ObjectId
+
+    @Prop({ required: true })
+    breakPointsTime: [BusScheduleBreakPointsTimeDocument]
+    status: BusScheduleStatusDocument
+}
+
+export const BusScheduleSchema = SchemaFactory.createForClass(BusScheduleDocument);

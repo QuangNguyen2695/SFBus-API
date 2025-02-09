@@ -1,11 +1,17 @@
+// seat.module.ts
+
 import { Module } from '@nestjs/common';
 import { SeatService } from './seat.service';
 import { SeatController } from './seat.controller';
-import { SeatTypeModule } from '../seat-type/seat-type.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { SeatDocument, SeatSchema } from './schema/seat.schema';
 
 @Module({
+  imports: [
+    MongooseModule.forFeature([{ name: SeatDocument.name, schema: SeatSchema }]),
+  ],
   controllers: [SeatController],
   providers: [SeatService],
-  imports: [SeatTypeModule],
+  exports: [SeatService, MongooseModule],
 })
-export class SeatModule {}
+export class SeatModule { }

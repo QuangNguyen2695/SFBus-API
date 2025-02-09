@@ -1,19 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateBusDto } from './dto/create-bus.dto';
-import { Bus } from './interface.ts/bus.interface';
-import { Model } from 'mongoose';
+import { BusDto } from './dto/bus.dto';
+import { Model, Types } from 'mongoose';
+import { BusDocument } from './schema/bus.schema';
 
 @Injectable()
 export class BusService {
-  constructor(@InjectModel('Bus') private readonly busModel: Model<Bus>) { }
+  constructor(@InjectModel(BusDocument.name) private readonly busModel: Model<BusDto>) { }
 
-  async create(createBusDto: CreateBusDto): Promise<Bus> {
+  async create(createBusDto: CreateBusDto): Promise<BusDto> {
     const createdBus = new this.busModel(createBusDto);
     return createdBus.save();
   }
 
-  async findAll(): Promise<Bus[]> {
+  async findOne(id: Types.ObjectId): Promise<BusDto> {
+    return this.busModel.findById(id).exec();
+  }
+
+  async findAll(): Promise<BusDto[]> {
     return this.busModel.find().exec();
   }
 }

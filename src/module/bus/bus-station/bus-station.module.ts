@@ -2,11 +2,13 @@ import { Module } from '@nestjs/common';
 import { BusStationService } from './bus-station.service';
 import { BusStationController } from './bus-station.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { BusStationSchema } from './schema/bus-station.schema';
+import { BusStationDocument, BusStationSchema } from './schema/bus-station.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'BusStation', schema: BusStationSchema }])
+    MongooseModule.forFeature([
+      { name: BusStationDocument.name, schema: BusStationSchema }
+    ])
   ],
   controllers: [BusStationController],
   providers: [BusStationService],

@@ -6,6 +6,7 @@ import {
   Req,
   Res,
   StreamableFile,
+  UseGuards,
 } from '@nestjs/common'
 import {
   ApiConsumes,
@@ -16,10 +17,14 @@ import {
 } from '@nestjs/swagger'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { UploadService } from './upload.service'
-import { FileUpload } from './entity/upload.entity'
+import { Roles } from '@/decorators/roles.decorator'
+import { JwtAuthGuard } from '@/guards/jwt-auth.guard'
+import { RolesGuard } from '@/guards/roles.guard'
+import { FileUploadDto } from './dto/upload.dto'
 
 type Request = FastifyRequest
 type Response = FastifyReply
+
 
 @ApiTags('File')
 @Controller('upload')
@@ -50,6 +55,8 @@ export class UploadController {
       },
     },
   })
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('user')
   @Post('upload-file')
   uploadFile(@Req() request: Request): Promise<{ ids: string[] }> {
     console.log("🚀 ~ UploadController ~ uploadFile ~ request:", request)
@@ -76,12 +83,16 @@ export class UploadController {
       },
     },
   })
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('user')
   @Get('get-all-files')
-  getAllFiles(): Promise<FileUpload[]> {
+  getAllFiles(): Promise<FileUploadDto[]> {
     return this.uploadService.getList()
   }
 
   @ApiOperation({ summary: 'Download a file.' })
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('user')
   @Get(':id')
   downloadFile(
     @Param('id') id: string,
@@ -92,6 +103,8 @@ export class UploadController {
   }
 
   @ApiOperation({ summary: 'View a file online.' })
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('user')
   @Get('view/:id')
   viewFile(
     @Param('id') id: string,

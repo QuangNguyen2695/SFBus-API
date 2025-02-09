@@ -9,7 +9,8 @@ import { InjectConnection, InjectModel } from '@nestjs/mongoose'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { GridFSBucket, ObjectId } from 'mongodb'
 import { Connection, Model, mongo } from 'mongoose'
-import { FileUpload } from './entity/upload.entity'
+import { FileUploadDocument } from './schema/upload.schema'
+import { FileUploadDto } from './dto/upload.dto'
 
 type Request = FastifyRequest
 type Response = FastifyReply
@@ -19,7 +20,7 @@ export class UploadService {
   private readonly bucket: any
 
   constructor(
-    @InjectModel('fs.files') private readonly fileModel: Model<FileUpload>,
+    @InjectModel(FileUploadDocument.name) private readonly fileModel: Model<FileUploadDto>,
     @InjectConnection() private readonly connection: Connection,
   ) {
     this.bucket = new mongo.GridFSBucket(this.connection.db)

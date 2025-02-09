@@ -8,6 +8,13 @@ import { BusProvinceModule } from './module/bus/bus-province/bus-province.module
 import { BusStationModule } from './module/bus/bus-station/bus-station.module';
 import { BusServiceModule } from './module/bus/bus-service/bus-service.module';
 import { UploadModule } from './module/upload/upload.module';
+import { BusRouteModule } from './module/bus/bus-route/bus-route.module';
+import { BusScheduleModule } from './module/bus/bus-schedule/bus-schedule.module';
+import { SeatModule } from './module/seat/seat/seat.module';
+import { SeatLayoutModule } from './module/seat/seatLayout/seat-layout.module';
+import { BusTemplateModule } from './module/bus/bus-template/bus-template.module';
+import { AuthModule } from './module/auth/auth.module';
+import { UserModule } from './module/user/user/user.module';
 
 @Module({
   imports: [
@@ -26,7 +33,14 @@ import { UploadModule } from './module/upload/upload.module';
     BusProvinceModule,
     BusStationModule,
     BusServiceModule,
-    UploadModule
+    UploadModule,
+    BusRouteModule,
+    BusScheduleModule,
+    SeatModule,
+    SeatLayoutModule,
+    BusTemplateModule,
+    UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

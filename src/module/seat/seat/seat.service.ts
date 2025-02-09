@@ -1,26 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateSeatDto } from './dto/create-seat.dto';
 import { UpdateSeatDto } from './dto/update-seat.dto';
+import { SeatDocument } from './schema/seat.schema';
+import { SeatDto } from './dto/seat.dto';
 
 @Injectable()
 export class SeatService {
-  create(createSeatDto: CreateSeatDto) {
-    return 'This action adds a new seat';
+  constructor(@InjectModel(SeatDocument.name) private seatModel: Model<SeatDto>) { }
+
+  async create(createSeatDto: CreateSeatDto): Promise<SeatDto> {
+    const createdSeat = new this.seatModel(createSeatDto);
+    return createdSeat.save();
   }
 
-  findAll() {
-    return `This action returns all seat`;
+  async findAll(): Promise<SeatDto[]> {
+    return this.seatModel.find().exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} seat`;
+  async findOne(id: string): Promise<SeatDto> {
+    const seat = await this.seatModel.findOne({ id }).exec();
+    if (!seat) {
+      throw new NotFoundException(`Seat với ID "${id}" không tồn tại.`);
+    }
+    return seat;
   }
 
-  update(id: number, updateSeatDto: UpdateSeatDto) {
-    return `This action updates a #${id} seat`;
+  async update(id: string, updateSeatDto: UpdateSeatDto): Promise<SeatDto> {
+    const updatedSeat = await this.seatModel
+      .findOneAndUpdate({ id }, updateSeatDto, { new: true })
+      .exec();
+    if (!updatedSeat) {
+      throw new NotFoundException(`Seat với ID "${id}" không tồn tại.`);
+    }
+    return updatedSeat;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} seat`;
+  async remove(id: string): Promise<void> {
+    const result = await this.seatModel.findOneAndDelete({ id }).exec();
+    if (!result) {
+      throw new NotFoundException(`Seat với ID "${id}" không tồn tại.`);
+    }
   }
 }
