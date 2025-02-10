@@ -7,11 +7,6 @@ export class BusScheduleBreakPointsTimeDocument extends Document {
     timeSchedule: Date
 }
 
-export class BusScheduleStatusDocument extends Document {
-    @Prop({ required: true, enum: ['scheduled', 'in_progress', 'completed', 'cancelled'], default: 'scheduled' })
-    type: String
-}
-
 @Schema({ collection: 'bus_schedules', timestamps: true },)
 export class BusScheduleDocument extends Document {
 
@@ -22,8 +17,10 @@ export class BusScheduleDocument extends Document {
     busRouteId: Types.ObjectId
 
     @Prop({ required: true })
-    breakPointsTime: [BusScheduleBreakPointsTimeDocument]
-    status: BusScheduleStatusDocument
+    breakPointsTime: BusScheduleBreakPointsTimeDocument[]
+
+    @Prop({ required: true, enum: ['scheduled', 'in_progress', 'completed', 'cancelled'], default: 'scheduled' })
+    status: String
 }
 
 export const BusScheduleSchema = SchemaFactory.createForClass(BusScheduleDocument);

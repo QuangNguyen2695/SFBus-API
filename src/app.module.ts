@@ -15,6 +15,7 @@ import { SeatLayoutModule } from './module/seat/seatLayout/seat-layout.module';
 import { BusTemplateModule } from './module/bus/bus-template/bus-template.module';
 import { AuthModule } from './module/auth/auth.module';
 import { UserModule } from './module/user/user/user.module';
+import { BusModule } from './module/bus/bus/bus.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { UserModule } from './module/user/user/user.module';
     BusTemplateModule,
     UserModule,
     AuthModule,
+    BusModule
   ],
   controllers: [AppController],
   providers: [AppService],

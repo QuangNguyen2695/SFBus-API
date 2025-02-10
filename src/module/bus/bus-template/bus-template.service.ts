@@ -2,11 +2,11 @@
 
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { CreateBusTemplateDto } from './dto/create-bus-templatedto';
-import { UpdateBusTemplateDto } from './dto/update-bus-templatedto';
+import { Model, Types } from 'mongoose';
 import { BusTemplateDocument } from './schema/bus-template.schema';
 import { BusTemplateDto } from './dto/bus-template.dto';
+import { CreateBusTemplateDto } from './dto/create-bus-template.dto';
+import { UpdateBusTemplateDto } from './dto/update-bus-template.dto';
 
 @Injectable()
 export class BusTemplateService {
@@ -15,17 +15,25 @@ export class BusTemplateService {
     ) { }
 
     async create(createBusTemplateDto: CreateBusTemplateDto): Promise<BusTemplateDto> {
-        // Validate that all SeatLayout IDs exist
-        const seatLayoutsExist = await this.validateSeatLayouts(
-            createBusTemplateDto.seatLayouts,
-        );
 
-        if (!seatLayoutsExist) {
-            throw new NotFoundException('One or more SeatLayouts do not exist.');
-        }
+        const seatLayouts = createBusTemplateDto.seatLayouts.map(layout => {
+            const seats = layout.seats.map(seat => ({
+                ...seat,
+                _id: new Types.ObjectId()
+            }));
+            return {
+                ...layout,
+                _id: new Types.ObjectId(),
+                seats
+            };
+        });
 
-        const createdTemplate = new this.busTemplateModel(createBusTemplateDto);
-        return createdTemplate.save();
+        const createdBusTemplate = new this.busTemplateModel({
+            ...createBusTemplateDto,
+            seatLayouts
+        });
+
+        return createdBusTemplate.save();
     }
 
     async findAll(): Promise<BusTemplateDto[]> {
@@ -49,17 +57,6 @@ export class BusTemplateService {
         id: string,
         updateBusTemplateDto: UpdateBusTemplateDto,
     ): Promise<BusTemplateDto> {
-        // Validate SeatLayouts if they're being updated
-        if (updateBusTemplateDto.seatLayouts) {
-            const seatLayoutsExist = await this.validateSeatLayouts(
-                updateBusTemplateDto.seatLayouts,
-            );
-
-            if (!seatLayoutsExist) {
-                throw new NotFoundException('One or more SeatLayouts do not exist.');
-            }
-        }
-
         const updatedTemplate = await this.busTemplateModel
             .findByIdAndUpdate(id, updateBusTemplateDto, { new: true })
             .populate('seatLayouts')

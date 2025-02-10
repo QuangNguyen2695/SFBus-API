@@ -11,11 +11,11 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { BusTemplateService } from './bus-template.service';
-import { CreateBusTemplateDto } from './dto/create-bus-templatedto';
-import { UpdateBusTemplateDto } from './dto/update-bus-templatedto';
+import { CreateBusTemplateDto } from './dto/create-bus-template.dto';
 import { Roles } from '@/decorators/roles.decorator';
 import { JwtAuthGuard } from '@/guards/jwt-auth.guard';
 import { RolesGuard } from '@/guards/roles.guard';
+import { UpdateBusTemplateDto } from './dto/update-bus-template.dto';
 
 @Controller('bus-templates')
 export class BusTemplateController {

@@ -4,10 +4,10 @@ import { Document, Types } from 'mongoose';
 @Schema({ collection: 'buses', timestamps: true })
 export class BusDocument extends Document {
     @Prop({ required: true })
-    name: { type: String, require: true }
+    name: String
 
     @Prop({ required: true, ref: 'bus_services' })
-    serviceIds: [Types.ObjectId]
+    serviceIds: Types.ObjectId[]
 
 
     @Prop({ required: true, ref: 'seat_types' })

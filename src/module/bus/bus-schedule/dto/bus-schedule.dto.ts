@@ -1,12 +1,11 @@
-// src/bus-schedule/interfaces/bus-schedule.interface.ts
-import { Document, Types } from 'mongoose';
+import { Types } from 'mongoose';
 
-export interface BreakPointsTimeDto {
+export class BreakPointsTimeDto {
   busStationId: Types.ObjectId;
   timeSchedule?: Date;
 }
 
-export interface BusScheduleDto {
+export class BusScheduleDto {
   busId: Types.ObjectId;
   busRouteId: Types.ObjectId;
   breakPointsTime: BreakPointsTimeDto[];

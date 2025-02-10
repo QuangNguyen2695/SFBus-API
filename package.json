@@ -23,7 +23,10 @@
     "seed:busStations": "ts-node -r tsconfig-paths/register src/seed/seed-busStations.ts",
     "seed:busProvinces": "ts-node -r tsconfig-paths/register src/seed/seed-busProvinces.ts",
     "seed:busServices": "ts-node -r tsconfig-paths/register src/seed/seed-busServices.ts",
-    "seed:busRoutes": "ts-node -r tsconfig-paths/register src/seed/seed-busRoutes.ts"
+    "seed:busRoutes": "ts-node -r tsconfig-paths/register src/seed/seed-busRoutes.ts",
+    "seed:busTemplates": "ts-node -r tsconfig-paths/register src/seed/seed-busTemplates.ts",
+    "seed:buses": "ts-node -r tsconfig-paths/register src/seed/seed-buses.ts",
+    "seed:busSchedules": "ts-node -r tsconfig-paths/register src/seed/seed-busSchedules.ts"
   },
   "dependencies": {
     "@fastify/multipart": "^9.0.3",
