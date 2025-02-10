@@ -1,4 +1,4 @@
-export class BusTemplateSeatDto extends Document {
+export class BusTemplateSeatDto {
     index: number;
     type: number;
     name: string;
@@ -6,12 +6,12 @@ export class BusTemplateSeatDto extends Document {
     status: string;
 }
 
-export class BusTemplateSeatLayoutDto extends Document {
+export class BusTemplateSeatLayoutDto {
     name: string;
     seats: BusTemplateSeatDto[];
 }
 
-export class BusTemplateDto extends Document {
+export class BusTemplateDto {
     name: string;
-    seatLayouts: BusTemplateSeatDto[];
+    seatLayouts: BusTemplateSeatLayoutDto[];
 }

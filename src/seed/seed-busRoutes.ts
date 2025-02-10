@@ -11,15 +11,15 @@ async function bootstrap() {
             name: "An Giang - Bà Rịa",
             breakPoints: [
                 {
-                    busStationId: new Types.ObjectId("67a343a4faf2ad6fe57314b8"),
+                    busStationId: new Types.ObjectId("67a87d9a2700d4adca8d4b9d"),
                 }, {
-                    busStationId: new Types.ObjectId("67a343a5faf2ad6fe57314c0"),
+                    busStationId: new Types.ObjectId("67a87d9a2700d4adca8d4ba5"),
                 }, {
-                    busStationId: new Types.ObjectId("67a343a3faf2ad6fe57314a0"),
+                    busStationId: new Types.ObjectId("67a87d992700d4adca8d4b85"),
                 }, {
-                    busStationId: new Types.ObjectId("67a343a3faf2ad6fe5731494"),
+                    busStationId: new Types.ObjectId("67a87d992700d4adca8d4b81"),
                 }, {
-                    busStationId: new Types.ObjectId("67a343a3faf2ad6fe5731498"),
+                    busStationId: new Types.ObjectId("67a87d992700d4adca8d4b7d"),
                 }
             ],
             distance: 200,
@@ -29,15 +29,15 @@ async function bootstrap() {
             name: "Bà Rịa - An Giang",
             breakPoints: [
                 {
-                    busStationId: new Types.ObjectId("67a343a4faf2ad6fe57314b8"),
+                    busStationId: new Types.ObjectId("67a87d992700d4adca8d4b7d"),
                 }, {
-                    busStationId: new Types.ObjectId("67a343a3faf2ad6fe5731494"),
+                    busStationId: new Types.ObjectId("67a87d992700d4adca8d4b81"),
                 }, {
-                    busStationId: new Types.ObjectId("67a343a3faf2ad6fe57314a0"),
+                    busStationId: new Types.ObjectId("67a87d992700d4adca8d4b85"),
                 }, {
-                    busStationId: new Types.ObjectId("67a343a5faf2ad6fe57314c0"),
+                    busStationId: new Types.ObjectId("67a87d9a2700d4adca8d4ba5"),
                 }, {
-                    busStationId: new Types.ObjectId("67a343a3faf2ad6fe5731498"),
+                    busStationId: new Types.ObjectId("67a87d9a2700d4adca8d4b9d"),
                 }
             ],
             distance: 200,

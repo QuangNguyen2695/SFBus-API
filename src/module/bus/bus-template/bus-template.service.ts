@@ -15,24 +15,9 @@ export class BusTemplateService {
     ) { }
 
     async create(createBusTemplateDto: CreateBusTemplateDto): Promise<BusTemplateDto> {
-
-        const seatLayouts = createBusTemplateDto.seatLayouts.map(layout => {
-            const seats = layout.seats.map(seat => ({
-                ...seat,
-                _id: new Types.ObjectId()
-            }));
-            return {
-                ...layout,
-                _id: new Types.ObjectId(),
-                seats
-            };
-        });
-
         const createdBusTemplate = new this.busTemplateModel({
             ...createBusTemplateDto,
-            seatLayouts
         });
-
         return createdBusTemplate.save();
     }
 

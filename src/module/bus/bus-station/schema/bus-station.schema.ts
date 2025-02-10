@@ -11,6 +11,9 @@ export class BusStationDocument extends Document {
     detailAddress: string;
 
     @Prop({ required: true })
+    location: string;
+
+    @Prop({ required: true })
     provinceId: Types.ObjectId;
 }
 

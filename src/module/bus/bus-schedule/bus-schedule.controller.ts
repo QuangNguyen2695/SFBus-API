@@ -1,5 +1,5 @@
 // src/bus-schedule/bus-schedule.controller.ts
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query, ValidationPipe } from '@nestjs/common';
 import { BusScheduleService } from './bus-schedule.service';
 import { CreateBusScheduleDto } from './dto/create-bus-schedule.dto';
 import { UpdateBusScheduleDto } from './dto/update-bus-schedule.dto';
@@ -7,6 +7,7 @@ import { Types } from 'mongoose';
 import { Roles } from '@/decorators/roles.decorator';
 import { JwtAuthGuard } from '@/guards/jwt-auth.guard';
 import { RolesGuard } from '@/guards/roles.guard';
+import { SearchBusScheduleQuery } from './dto/bus-schedule.dto';
 
 @Controller('bus-schedule')
 export class BusScheduleController {
@@ -48,5 +49,18 @@ export class BusScheduleController {
   @Delete(':id')
   remove(@Param('id') id: Types.ObjectId) {
     return this.busScheduleService.remove(id);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('user')
+  @Get('search')
+  searchBusSchedule(
+    @Query(new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+      forbidNonWhitelisted: true
+    })) query: SearchBusScheduleQuery
+  ) {
+    return this.busScheduleService.searchBusSchedule(query);
   }
 }

@@ -16,13 +16,13 @@ async function bootstrap() {
             name: `Bến xe ${province.name}`,
             provinceId: province._id,
             detailAddress: `${province.name} - Address 1`,
-            points: [106.700981, 10.773456]
+            location: '106.700981, 10.773456',
         },
         {
             name: `Văn Phòng ${province.name}`,
             provinceId: province._id,
             detailAddress: `${province.name} - Address 2`,
-            points: [106.700981, 10.773456]
+            location: '106.700981, 10.773456',
         }
     ]) as CreateBusStationDto[];
 

@@ -3,8 +3,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
-
-@Schema({ _id: true })
 export class BusTemplateSeatDocument extends Document {
   @Prop({ required: true })
   index: number;
@@ -22,7 +20,6 @@ export class BusTemplateSeatDocument extends Document {
   status: string;
 }
 
-@Schema({ _id: true })
 export class BusTemplateSeatLayoutDocument extends Document {
   @Prop({ required: true })
   name: string;
