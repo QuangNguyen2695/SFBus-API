@@ -103,8 +103,6 @@ export class UploadController {
   }
 
   @ApiOperation({ summary: 'View a file online.' })
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('user')
   @Get('view/:id')
   viewFile(
     @Param('id') id: string,

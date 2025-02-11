@@ -4,7 +4,7 @@ export class CreateBusDto {
   name: string;
   licensePlate: string;
   description?: string;
-  busTemplate: Types.ObjectId;
-  serviceIds: Types.ObjectId[];
-  seatTypeId: Types.ObjectId;
+  busTemplateId: Types.ObjectId;
+  busServiceIds: Types.ObjectId[];
+  busTypeId: Types.ObjectId;
 }

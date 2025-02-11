@@ -12,12 +12,14 @@ import { AuthService } from '@/module/auth/auth.service';
 export class LocalStrategy extends PassportStrategy(Strategy) {
     constructor(private authService: AuthService) {
         // By default, passport-local expects 'username' and 'password' fields
-        super();
+        super({
+            usernameField: 'phoneNumber' // Định nghĩa trường `username` thành `phoneNumber`
+        });
     }
 
-    async validate(username: string, password: string): Promise<any> {
+    async validate(phoneNumber: string, password: string): Promise<any> {
         // Validate the user credentials
-        const user = await this.authService.validateUser(username, password);
+        const user = await this.authService.validateUser(phoneNumber, password);
         if (!user) {
             throw new UnauthorizedException('Tên đăng nhập hoặc mật khẩu không đúng.');
         }

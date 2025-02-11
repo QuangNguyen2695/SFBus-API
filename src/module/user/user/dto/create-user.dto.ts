@@ -10,10 +10,11 @@ import {
 } from 'class-validator';
 
 export class CreateUserDto {
+    
     @IsNotEmpty()
     @IsString()
-    readonly username: string;
-
+    phoneNumber?: string;
+    
     @IsNotEmpty()
     @IsString()
     @MinLength(6)
@@ -21,30 +22,29 @@ export class CreateUserDto {
 
     @IsNotEmpty()
     @IsString()
-    readonly name: string;
+    name: string;
 
     @IsOptional()
     @IsString()
-    readonly address?: string;
+    address?: string;
 
     @IsNotEmpty()
     @IsEmail()
-    readonly email: string;
+    email: string;
 
     @IsOptional()
     @IsString()
     @Matches(/^\d{10,15}$/, {
         message: 'Số điện thoại không hợp lệ.',
     })
-    readonly phoneNumber?: string;
 
     @IsNotEmpty()
     @IsEnum(['male', 'female', 'other'], {
         message: 'Giới tính phải là male, female hoặc other.',
     })
-    readonly gender: string;
+    gender: string;
 
     @IsOptional()
     @IsDateString()
-    readonly birthdate?: string; // Sử dụng ISO String cho ngày tháng
+    birthdate?: string; // Sử dụng ISO String cho ngày tháng
 }

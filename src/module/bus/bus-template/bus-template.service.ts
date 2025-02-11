@@ -60,12 +60,4 @@ export class BusTemplateService {
             throw new NotFoundException(`BusTemplate with ID "${id}" not found.`);
         }
     }
-
-    private async validateSeatLayouts(seatLayoutIds: string[]): Promise<boolean> {
-        const count = await this.busTemplateModel
-            .countDocuments({ _id: { $in: seatLayoutIds } })
-            .exec();
-
-        return count === seatLayoutIds.length;
-    }
 }

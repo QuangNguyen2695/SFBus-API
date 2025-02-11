@@ -7,16 +7,16 @@ export class BusDocument extends Document {
     name: String
 
     @Prop({ required: true, ref: 'bus_services' })
-    serviceIds: Types.ObjectId[]
+    busServiceIds: Types.ObjectId[]
 
 
     @Prop({ required: true, ref: 'seat_types' })
-    seatTypeId: Types.ObjectId
+    busTypeId: Types.ObjectId
 
     @Prop({ required: true })
     licensePlate: String // Biển số xe
 
     @Prop({ required: true, ref: 'bus_template', })
-    busTemplate: Types.ObjectId
+    busTemplateId: Types.ObjectId
 }
 export const BusSchema = SchemaFactory.createForClass(BusDocument);

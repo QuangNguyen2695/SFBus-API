@@ -11,14 +11,14 @@ async function bootstrap() {
         {
             name: 'Xe 01',
             description: 'test',
-            serviceIds: [
+            busServiceIds: [
                 new Types.ObjectId('67a87d962700d4adca8d4b36'),
                 new Types.ObjectId('67a87d972700d4adca8d4b39'),
                 new Types.ObjectId('67a87d972700d4adca8d4b3c'),
             ],
-            seatTypeId: new Types.ObjectId('67a874609aa5254189484c9c'),
+            busTypeId: new Types.ObjectId('67a874609aa5254189484c9c'),
             licensePlate: '66H1 90767',
-            busTemplate: new Types.ObjectId('67a9f822ab9f94403fe4d7b1')
+            busTemplateId: new Types.ObjectId('67a9f822ab9f94403fe4d7b1')
         }
     ]
 

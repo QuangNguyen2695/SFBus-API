@@ -8,11 +8,14 @@ import { Types } from 'mongoose';
 import { BusScheduleDto, SearchBusScheduleQuery } from './dto/bus-schedule.dto';
 import { BusScheduleDocument } from './schema/bus-schedule.schema';
 import * as moment from 'moment-timezone';
+import { BusService } from '../bus/bus.service';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class BusScheduleService {
   constructor(
     @InjectModel(BusScheduleDocument.name) private busScheduleModel: Model<BusScheduleDto>,
+    private readonly busService: BusService
   ) { }
 
   async create(createBusScheduleDto: CreateBusScheduleDto): Promise<BusScheduleDto> {
@@ -52,6 +55,8 @@ export class BusScheduleService {
     }
   }
 
+
+
   async searchBusSchedule(query: SearchBusScheduleQuery): Promise<BusScheduleDto[]> {
     // Chuyển đổi departureDate thành đối tượng Date và đặt múi giờ Việt Nam
     const departureDate = moment.tz(query.departureDate, 'YYYY-MM-DDTHH:mm:ss.SSSZ', 'Asia/Ho_Chi_Minh');
@@ -64,28 +69,26 @@ export class BusScheduleService {
     const startOfDay = departureDate.clone().startOf('day').tz('Asia/Ho_Chi_Minh').toDate();
     const endOfDay = departureDate.clone().endOf('day').tz('Asia/Ho_Chi_Minh').toDate();
 
-    console.log('departureDate:', departureDate.format());
-    console.log('startOfDay:', startOfDay);
-    console.log('endOfDay:', endOfDay);
-
     // Tìm kiếm các bus schedules
     const schedules = await this.busScheduleModel.find({
-      'breakPointsTime': {
+      'busRoute.breakPoints': {
         $elemMatch: {
           timeSchedule: { $gte: startOfDay, $lte: endOfDay },
           busStationId: new Types.ObjectId(query.departureId)
         }
       }
-    }).exec();
-
-    console.log('schedules:', schedules);
+    }).lean().exec();
 
     const filteredSchedules = schedules.filter(schedule => {
-      const departureIndex = schedule.breakPointsTime.findIndex(point => point.busStationId.equals(new Types.ObjectId(query.departureId)));
-      const destinationIndex = schedule.breakPointsTime.findIndex(point => point.busStationId.equals(new Types.ObjectId(query.destinationId)));
+      const departureIndex = schedule.busRoute.breakPoints.findIndex(point => point.busStationId.equals(new Types.ObjectId(query.departureId)));
+      const destinationIndex = schedule.busRoute.breakPoints.findIndex(point => point.busStationId.equals(new Types.ObjectId(query.destinationId)));
       return departureIndex !== -1 && destinationIndex !== -1 && departureIndex < destinationIndex;
     });
 
-    return filteredSchedules;
+    const busSchedules = await Promise.all(filteredSchedules.map(async (busSchedule) => {
+      busSchedule.bus = await this.busService.findOne(busSchedule.busId.toString());
+      return busSchedule;
+    }));
+    return plainToInstance(BusScheduleDto, busSchedules);
   }
 }

@@ -9,6 +9,7 @@ import {
   UseGuards,
   Request,
   Get,
+  Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,6 +17,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '@/guards/jwt-auth.guard';
 import { UserDocument } from './schema/user.schema';
 import { UserDto } from './dto/user.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Controller('users')
 export class UserController {
@@ -33,7 +35,7 @@ export class UserController {
       const user = await this.userService.create(createUserDto);
       return {
         message: 'Đăng ký thành công!',
-        user: { username: user.username, _id: user._id },
+        user: { phoneNumber: user.phoneNumber, _id: user._id },
       };
     } catch (error) {
       throw new BadRequestException(error.message);
@@ -50,10 +52,8 @@ export class UserController {
       return {
         message: 'Cập nhật thông tin thành công!',
         user: {
-          username: updatedUser.username,
           email: updatedUser.email,
           name: updatedUser.name,
-          // Có thể thêm các trường khác tùy ý
         },
       };
     } catch (error) {
@@ -70,8 +70,6 @@ export class UserController {
     if (!user) {
       throw new BadRequestException('User not found.');
     }
-    const userObject = user.toObject();
-    const { password, ...result } = userObject;
-    return result;
+    return plainToInstance(UserDto, user);
   }
 }

@@ -13,8 +13,8 @@ export class AuthService {
     ) { }
 
     // Xác thực người dùng khi đăng nhập
-    async validateUser(username: string, password: string): Promise<any> {
-        const user = await this.userService.validateUser(username, password);
+    async validateUser(phoneNumber: string, password: string): Promise<any> {
+        const user = await this.userService.validateUser(phoneNumber, password);
         if (user) {
             return user;
         }
@@ -23,9 +23,18 @@ export class AuthService {
 
     // Đăng nhập và trả về JWT token
     async login(user: UserDto) {
-        const payload = { username: user.username, sub: user._id.toString(), role: user.role };
+        const payload = { sub: user._id.toString(), role: user.role };
         return {
             access_token: this.jwtService.sign(payload),
         };
+    }
+
+    // Xác thực người dùng khi đăng nhập
+    async verifyPhoneNumber(phoneNumber: string): Promise<any> {
+        const user = await this.userService.findByPhoneNumber(phoneNumber);
+        if (user) {
+            return true;
+        }
+        return false;
     }
 }

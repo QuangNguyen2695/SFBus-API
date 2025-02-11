@@ -1,12 +1,12 @@
 import { AppModule } from '@/app.module';
-import { SeatTypeService } from '@/module/seat/seat-type/seat-type.service';
+import { BusTypeService } from '@/module/bus/bus-type/bus-type.service';
 import { NestFactory } from '@nestjs/core';
 
 async function bootstrap() {
     const app = await NestFactory.createApplicationContext(AppModule);
-    const seatTypeService = app.get(SeatTypeService);
+    const busTypeService = app.get(BusTypeService);
 
-    const seatTypes = [
+    const busTypes = [
         {
             name: "Ghế",
         },
@@ -18,9 +18,8 @@ async function bootstrap() {
         }
     ]
 
-
-    for (const seatType of seatTypes) {
-        await seatTypeService.create(seatType);
+    for (const busType of busTypes) {
+        await busTypeService.create(busType);
     }
     await app.close();
 }

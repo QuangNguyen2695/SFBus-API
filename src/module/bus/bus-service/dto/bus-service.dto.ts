@@ -1,6 +1,23 @@
-import { Document } from 'mongoose';
+import { Exclude, Expose } from 'class-transformer';
+import { Date, Document, Types } from 'mongoose';
 
-export interface BusServiceDto extends Document {
-  readonly name: string
-  readonly icon: string
+export class BusServiceDto {
+  @Expose()
+  _id: Types.ObjectId
+
+  @Expose()
+  name: string
+
+  @Expose()
+  icon: string
+
+  @Exclude()
+  createdAt: Date
+
+  @Exclude()
+  updatedAt: Date
+
+  @Exclude()
+  __v: number
 }
+

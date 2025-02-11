@@ -1,9 +1,8 @@
 import { IsNotEmpty, IsOptional, IsEnum, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
 import { Types } from 'mongoose';
-import { BusTemplateDto } from '../../bus-template/dto/bus-template.dto';
+import { CreateBusRouteBreakPointsDto, CreateBusRouteDto } from '../../bus-route/dto/create-bus-route.dto';
 
-export class BreakPointsTimeDto {
+export class CreateBusScheduleBreakPointsTimeDto {
   @IsNotEmpty()
   busStationId: Types.ObjectId;
 
@@ -21,6 +20,18 @@ export class BreakPointsTimeDto {
   timeSchedule?: Date;
 }
 
+export class CreateBusRouteScheduleBreakPointsDto extends CreateBusRouteBreakPointsDto {
+  timeSchedule: Date;
+  provinceId: Types.ObjectId;
+  name: string;
+  detailAddress: string;
+  location: string;
+}
+
+export class CreateBusRouteScheduleDto extends CreateBusRouteDto {
+  breakPoints: CreateBusRouteScheduleBreakPointsDto[];
+}
+
 export class CreateBusScheduleDto {
   @IsNotEmpty()
   busId: Types.ObjectId;
@@ -29,18 +40,16 @@ export class CreateBusScheduleDto {
   busRouteId: Types.ObjectId;
 
   @IsNotEmpty()
-  @ValidateNested({ each: true })
-  @Type(() => BreakPointsTimeDto)
-  breakPointsTime: BreakPointsTimeDto[];
+  busRoute: CreateBusRouteScheduleDto;
 
   @IsNotEmpty()
   busTemplatesId: Types.ObjectId
 
   @IsNotEmpty()
-  busTemplates: BusTemplateDto
+  price: number;
 
   @IsNotEmpty()
-  price: number;
+  remainSeat: number;
 
   @IsOptional()
   @IsEnum(['scheduled', 'in_progress', 'completed', 'cancelled'])

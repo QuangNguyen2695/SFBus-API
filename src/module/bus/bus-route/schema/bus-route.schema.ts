@@ -1,9 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types, Document } from 'mongoose';
 
-export class BreakPointsDocument extends Document {
+export class BusRouteBreakPointsDocument extends Document {
     @Prop({ required: true })
     busStationId: Types.ObjectId
+    
     notes: String
 }
 
@@ -14,7 +15,7 @@ export class BusRouteDocument extends Document {
     name: String
 
     @Prop({ required: true })
-    breakPoints: [BreakPointsDocument]
+    breakPoints: [BusRouteBreakPointsDocument]
 
     @Prop({ required: true })
     distance: Number

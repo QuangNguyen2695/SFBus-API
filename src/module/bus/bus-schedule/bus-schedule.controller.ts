@@ -7,11 +7,15 @@ import { Types } from 'mongoose';
 import { Roles } from '@/decorators/roles.decorator';
 import { JwtAuthGuard } from '@/guards/jwt-auth.guard';
 import { RolesGuard } from '@/guards/roles.guard';
-import { SearchBusScheduleQuery } from './dto/bus-schedule.dto';
+import { BusScheduleDto, SearchBusScheduleQuery } from './dto/bus-schedule.dto';
+import { BusService } from '../bus/bus.service';
 
 @Controller('bus-schedule')
 export class BusScheduleController {
-  constructor(private readonly busScheduleService: BusScheduleService) { }
+  constructor(
+    private readonly busScheduleService: BusScheduleService,
+    private readonly busService: BusService
+  ) { }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('user')
@@ -54,7 +58,7 @@ export class BusScheduleController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('user')
   @Get('search')
-  searchBusSchedule(
+  async searchBusSchedule(
     @Query(new ValidationPipe({
       transform: true,
       transformOptions: { enableImplicitConversion: true },

@@ -1,15 +1,27 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types, Document } from 'mongoose';
-import { BusTemplateDocument } from '../../bus-template/schema/bus-template.schema';
+import { BusRouteBreakPointsDocument, BusRouteDocument } from '../../bus-route/schema/bus-route.schema';
 
-export class BusScheduleBreakPointsTimeDocument extends Document {
-    @Prop({ required: true, ref: 'bus_stations' })
-    busStationId: Types.ObjectId
-    name: string
-    detailAddress: string
-    location: string
-    provinceId: Types.ObjectId
-    timeSchedule: Date
+export class BusScheduleRouteDocument extends BusRouteDocument {
+    @Prop({ required: true })
+    breakPoints: [BusRouteScheduleBreakPointsDocument]
+}
+
+export class BusRouteScheduleBreakPointsDocument extends BusRouteBreakPointsDocument {
+    @Prop({ required: true })
+    timeSchedule: Date;
+
+    @Prop({ required: true })
+    provinceId: Types.ObjectId;
+
+    @Prop({ required: true })
+    name: string;
+
+    @Prop({ required: true })
+    detailAddress: string;
+
+    @Prop({ required: true })
+    location: string;
 }
 
 @Schema({ collection: 'bus_schedules', timestamps: true },)
@@ -21,17 +33,17 @@ export class BusScheduleDocument extends Document {
     @Prop({ required: true, ref: 'bus_routes' })
     busRouteId: Types.ObjectId
 
-    @Prop({ required: true })
-    breakPointsTime: BusScheduleBreakPointsTimeDocument[];
+    @Prop({ required: true, ref: 'bus_routes' })
+    busRoute: BusScheduleRouteDocument
 
     @Prop({ required: true })
     busTemplatesId: Types.ObjectId
 
     @Prop({ required: true })
-    busTemplates: BusTemplateDocument
+    price: number
 
     @Prop({ required: true })
-    price: number
+    remainSeat: number
 
     @Prop({ required: true, enum: ['scheduled', 'in_progress', 'completed', 'cancelled'], default: 'scheduled' })
     status: String

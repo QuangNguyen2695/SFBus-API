@@ -5,6 +5,7 @@ import { CreateBusServiceDto } from './dto/create-bus-service.dto';
 import { BusServiceDto } from './dto/bus-service.dto';
 import { UpdateBusServiceDto } from './dto/update-bus-service.dto';
 import { BusServiceDocument } from './schema/bus-service.schema';
+import { plainToClass, plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class BusServiceService {
@@ -16,11 +17,13 @@ export class BusServiceService {
   }
 
   async findAll(): Promise<BusServiceDto[]> {
-    return this.busServiceModel.find().exec();
+    const busServices = await this.busServiceModel.find().lean().exec();
+    return plainToInstance(BusServiceDto, busServices);
   }
 
   async findOne(id: string): Promise<BusServiceDto> {
-    return this.busServiceModel.findById(id).exec();
+    const busService = await this.busServiceModel.findById(id).lean().exec();
+    return plainToInstance(BusServiceDto, busService);
   }
 
   async update(id: string, updateBusServiceDto: UpdateBusServiceDto): Promise<BusServiceDto> {

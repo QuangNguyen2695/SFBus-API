@@ -5,9 +5,8 @@ import { Document } from 'mongoose';
 
 @Schema({ collection: 'users', timestamps: true })
 export class UserDocument extends Document {
-
     @Prop({ required: true, unique: true })
-    username: string;
+    phoneNumber: string;
 
     @Prop({ required: true })
     password: string;
@@ -23,9 +22,6 @@ export class UserDocument extends Document {
 
     @Prop({ required: true, unique: true })
     email: string;
-
-    @Prop({ required: true, unique: true })
-    phoneNumber: string;
 
     @Prop()
     birthdate?: Date;

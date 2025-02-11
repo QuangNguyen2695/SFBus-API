@@ -1,4 +1,4 @@
-import { Controller, Request, Post, UseGuards, Get } from '@nestjs/common';
+import { Controller, Request, Post, UseGuards, Get, Req, Param, Query } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from '@/guards/local-auth.guard.ts';
 
@@ -12,5 +12,10 @@ export class AuthController {
     async login(@Request() req) {
         // Sau khi LocalStrategy xác thực, req.user sẽ chứa thông tin người dùng
         return this.authService.login(req.user);
+    }
+
+    @Get('verify-phoneNumber')
+    async verifyPhoneNumber(@Query('phoneNumber') phoneNumber: string) {
+        return this.authService.verifyPhoneNumber(phoneNumber);
     }
 }

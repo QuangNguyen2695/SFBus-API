@@ -8,6 +8,7 @@ import * as bcrypt from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDocument } from './schema/user.schema';
 import { UserDto } from './dto/user.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UserService {
@@ -15,17 +16,14 @@ export class UserService {
 
   // Tạo mới người dùng
   async create(createUserDto: CreateUserDto): Promise<UserDto> {
-    const { username, password, email, phoneNumber } = createUserDto;
+    const { password, email, phoneNumber } = createUserDto;
 
     // Kiểm tra tính duy nhất của username, email và phoneNumber
     const userExists = await this.userModel.findOne({
-      $or: [{ username }, { email }, { phoneNumber }],
+      $or: [{ email }, { phoneNumber }],
     });
 
     if (userExists) {
-      if (userExists.username === username) {
-        throw new BadRequestException('Tên đăng nhập đã được sử dụng.');
-      }
       if (userExists.email === email) {
         throw new BadRequestException('Email đã được sử dụng.');
       }
@@ -52,15 +50,8 @@ export class UserService {
       throw new NotFoundException('Người dùng không tồn tại.');
     }
 
-    // Nếu cập nhật username, email hoặc phoneNumber, cần kiểm tra tính duy nhất
-    const { username, email, phoneNumber } = updateUserDto;
-
-    if (username && username !== user.username) {
-      const usernameExists = await this.userModel.findOne({ username });
-      if (usernameExists) {
-        throw new BadRequestException('Tên đăng nhập đã được sử dụng.');
-      }
-    }
+    // Nếu cập nhật email hoặc phoneNumber, cần kiểm tra tính duy nhất
+    const { email, phoneNumber } = updateUserDto;
 
     if (email && email !== user.email) {
       const emailExists = await this.userModel.findOne({ email });
@@ -87,21 +78,19 @@ export class UserService {
 
   // Tìm người dùng theo ID
   async findById(userId: Types.ObjectId): Promise<UserDto> {
-    return this.userModel.findById(userId).exec();
+    return this.userModel.findById(userId).lean().exec();
   }
 
   // Tìm người dùng theo tên đăng nhập
-  async findByUsername(username: string): Promise<UserDto> {
-    return this.userModel.findOne({ username }).exec();
+  async findByPhoneNumber(phoneNumber: string): Promise<UserDto> {
+    return this.userModel.findOne({ phoneNumber: phoneNumber }).lean().exec();
   }
 
   // Xác thực người dùng
-  async validateUser(username: string, password: string): Promise<any> {
-    const user = await this.findByUsername(username);
+  async validateUser(phoneNumber: string, password: string): Promise<any> {
+    const user = await this.findByPhoneNumber(phoneNumber);
     if (user && (await bcrypt.compare(password, user.password))) {
-      const userObject = user.toObject();
-      const { password, ...result } = userObject;
-      return result;
+      return plainToInstance(UserDto, user);
     }
     return null;
   }

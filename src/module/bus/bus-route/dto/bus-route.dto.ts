@@ -1,15 +1,20 @@
 import { Document, Types } from 'mongoose';
 
 export class BusRouteDto {
-  readonly name: string;
-  readonly breakPoints: BreakPointsDto[];
-  readonly distance: number;
-  readonly distanceTime: string;
-  readonly notes?: string;
+  name: string;
+  breakPoints: BusRouteBreakPointsDto[];
+  distance: number;
+  distanceTime: string;
+  notes?: string;
 }
 
 
-class BreakPointsDto {
-  readonly busStationId: Types.ObjectId;
-  readonly notes?: string;
+class BusRouteBreakPointsDto {
+  timeSchedule: Date;
+  busStationId: Types.ObjectId;
+  provinceId: Types.ObjectId;
+  name: string;
+  detailAddress: string;
+  location: string;
+  notes?: string;
 }
