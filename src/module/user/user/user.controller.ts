@@ -10,10 +10,11 @@ import {
   Request,
   Get,
   Req,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdatePasswordUserDto, UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '@/guards/jwt-auth.guard';
 import { UserDocument } from './schema/user.schema';
 import { UserDto } from './dto/user.dto';
@@ -63,13 +64,27 @@ export class UserController {
 
   // Endpoint lấy thông tin người dùng hiện tại
   @UseGuards(JwtAuthGuard)
-  @Get('profile')
-  async getProfile(@Request() req) {
+  @Get('get-current-user')
+  async getCurrentUser(@Request() req) {
     const userId = req.user._id;
     const user: UserDto = await this.userService.findById(userId);
     if (!user) {
       throw new BadRequestException('User not found.');
     }
     return plainToInstance(UserDto, user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('update-password')
+  async updatePassword(@Request() req, @Body() updatePasswordUserDto: UpdatePasswordUserDto) {
+    const userId = req.user._id;
+    const updatedUser = await this.userService.updatePassword(userId, updatePasswordUserDto);
+    return {
+      message: 'Cập nhật thông tin thành công!',
+      user: {
+        email: updatedUser.email,
+        name: updatedUser.name,
+      },
+    };
   }
 }

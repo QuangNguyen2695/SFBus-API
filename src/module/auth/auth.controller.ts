@@ -16,6 +16,7 @@ export class AuthController {
 
     @Get('verify-phoneNumber')
     async verifyPhoneNumber(@Query('phoneNumber') phoneNumber: string) {
-        return this.authService.verifyPhoneNumber(phoneNumber);
+        const name = await this.authService.verifyPhoneNumber(phoneNumber);
+        return JSON.stringify(name);
     }
 }

@@ -30,11 +30,11 @@ export class AuthService {
     }
 
     // Xác thực người dùng khi đăng nhập
-    async verifyPhoneNumber(phoneNumber: string): Promise<any> {
+    async verifyPhoneNumber(phoneNumber: string): Promise<string> {
         const user = await this.userService.findByPhoneNumber(phoneNumber);
         if (user) {
-            return true;
+            return user.name;
         }
-        return false;
+        return null;
     }
 }

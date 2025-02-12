@@ -7,15 +7,16 @@ import {
     IsEnum,
     IsDateString,
     Matches,
+    IsBoolean,
 } from 'class-validator';
 
 export class CreateUserDto {
-    
+
     @IsNotEmpty()
     @IsString()
-    phoneNumber?: string;
-    
-    @IsNotEmpty()
+    phoneNumber: string;
+
+    @IsOptional()
     @IsString()
     @MinLength(6)
     password: string;
@@ -28,7 +29,7 @@ export class CreateUserDto {
     @IsString()
     address?: string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsEmail()
     email: string;
 
@@ -38,7 +39,7 @@ export class CreateUserDto {
         message: 'Số điện thoại không hợp lệ.',
     })
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsEnum(['male', 'female', 'other'], {
         message: 'Giới tính phải là male, female hoặc other.',
     })
@@ -47,4 +48,8 @@ export class CreateUserDto {
     @IsOptional()
     @IsDateString()
     birthdate?: string; // Sử dụng ISO String cho ngày tháng
+
+    @IsNotEmpty()
+    @IsBoolean()
+    isTempPassWord: boolean; // Sử dụng ISO String cho ngày tháng
 }

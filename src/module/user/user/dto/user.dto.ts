@@ -34,6 +34,9 @@ export class UserDto {
     createdAt: Date
 
     @Exclude()
+    isTempPassWord: Date
+
+    @Exclude()
     updatedAt: Date
 
     @Exclude()

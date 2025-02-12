@@ -20,7 +20,7 @@ export class UserDocument extends Document {
     @Prop({ enum: ['male', 'female', 'other'], default: 'other' })
     gender: string;
 
-    @Prop({ required: true, unique: true })
+    @Prop()
     email: string;
 
     @Prop()
@@ -28,6 +28,9 @@ export class UserDocument extends Document {
 
     @Prop({ default: 'user' })
     role: string;
+
+    @Prop({ required: true, default: true })
+    isTempPassWord: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserDocument);

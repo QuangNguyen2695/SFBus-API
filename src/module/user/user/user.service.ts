@@ -5,7 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdatePasswordUserDto, UpdateUserDto } from './dto/update-user.dto';
 import { UserDocument } from './schema/user.schema';
 import { UserDto } from './dto/user.dto';
 import { plainToInstance } from 'class-transformer';
@@ -16,17 +16,14 @@ export class UserService {
 
   // Tạo mới người dùng
   async create(createUserDto: CreateUserDto): Promise<UserDto> {
-    const { password, email, phoneNumber } = createUserDto;
+    const { password, phoneNumber } = createUserDto;
 
     // Kiểm tra tính duy nhất của username, email và phoneNumber
     const userExists = await this.userModel.findOne({
-      $or: [{ email }, { phoneNumber }],
+      $or: [{ phoneNumber }],
     });
 
     if (userExists) {
-      if (userExists.email === email) {
-        throw new BadRequestException('Email đã được sử dụng.');
-      }
       if (userExists.phoneNumber === phoneNumber) {
         throw new BadRequestException('Số điện thoại đã được sử dụng.');
       }
@@ -94,4 +91,27 @@ export class UserService {
     }
     return null;
   }
+
+
+  async updatePassword(userId: string, updatePasswordUserDto: UpdatePasswordUserDto): Promise<UserDto> {
+    const user = await this.userModel.findById(userId);
+    if (!user) throw new NotFoundException('Người dùng không tồn tại.');
+
+    const { oldPassword, password } = updatePasswordUserDto;
+
+    const isOldPasswordRequired = !user.isTempPassWord && !oldPassword;
+    const isOldPasswordInvalid = user.isTempPassWord && !this.validateUser(user.phoneNumber, oldPassword);
+
+    if (isOldPasswordRequired || isOldPasswordInvalid) {
+      throw new NotFoundException('Mật khẩu cũ không đúng');
+    }
+
+    if (password) {
+      updatePasswordUserDto.password = await bcrypt.hash(password, 10);
+    }
+
+    Object.assign(user, updatePasswordUserDto);
+    return user.save();
+  }
+
 }
