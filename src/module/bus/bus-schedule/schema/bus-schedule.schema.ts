@@ -37,7 +37,7 @@ export class BusScheduleDocument extends Document {
     busRoute: BusScheduleRouteDocument
 
     @Prop({ required: true })
-    busTemplatesId: Types.ObjectId
+    busScheduleTemplateId: Types.ObjectId
 
     @Prop({ required: true })
     price: number

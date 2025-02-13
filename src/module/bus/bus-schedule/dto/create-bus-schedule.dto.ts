@@ -43,7 +43,7 @@ export class CreateBusScheduleDto {
   busRoute: CreateBusRouteScheduleDto;
 
   @IsNotEmpty()
-  busTemplatesId: Types.ObjectId
+  busScheduleTemplateId: Types.ObjectId
 
   @IsNotEmpty()
   price: number;

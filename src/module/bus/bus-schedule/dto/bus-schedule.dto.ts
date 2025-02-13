@@ -48,7 +48,7 @@ export class BusScheduleDto {
   busRoute: BusScheduleRouteDto;
 
   @Expose()
-  busTemplatesId: Types.ObjectId;
+  busScheduleTemplateId: Types.ObjectId
 
   @Expose()
   price: number;

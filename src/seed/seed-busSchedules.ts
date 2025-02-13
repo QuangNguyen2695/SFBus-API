@@ -62,7 +62,7 @@ async function bootstrap() {
                     }
                 ],
             },
-            busTemplatesId: new Types.ObjectId('67aa1e01cb2a364b458e7fd0'),
+            busScheduleTemplateId: new Types.ObjectId('67aa1e01cb2a364b458e7fd0'),
             price: 165000,
             remainSeat: 6,
             status: 'in_progress'

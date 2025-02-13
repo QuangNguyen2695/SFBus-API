@@ -16,7 +16,7 @@ export class BusTypeService {
   }
 
   async findAll(): Promise<BusTypeDto[]> {
-    const busTypes = await this.busType.find().exec();
+    const busTypes = await this.busType.find().lean().exec();
     return plainToInstance(BusTypeDto, busTypes);
   }
 

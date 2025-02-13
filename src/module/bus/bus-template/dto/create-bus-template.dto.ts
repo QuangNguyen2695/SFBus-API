@@ -1,6 +1,8 @@
+import { Types } from "mongoose";
+
 export class CreateBusTemplateSeatDto {
     index: number;
-    type: number;
+    type: Types.ObjectId;
     name: string;
     icon: string;
     status: string;

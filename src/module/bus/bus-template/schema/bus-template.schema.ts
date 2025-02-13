@@ -8,7 +8,7 @@ export class BusTemplateSeatDocument extends Document {
   index: number;
 
   @Prop({ required: true })
-  type: number;
+  type: Types.ObjectId;
 
   @Prop({ required: true })
   name: string;

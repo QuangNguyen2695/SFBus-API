@@ -15,6 +15,7 @@ import { UserModule } from './module/user/user/user.module';
 import { BusModule } from './module/bus/bus/bus.module';
 import { BusTypeModule } from './module/bus/bus-type/bus-type.module';
 import { BusScheduleTemplateModule } from './module/bus/bus-schedule-template/bus-schedule-template.module';
+import { SeatTypeModule } from './module/seat/seat-type/seat-type.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { BusScheduleTemplateModule } from './module/bus/bus-schedule-template/bu
     UserModule,
     AuthModule,
     BusModule,
+    SeatTypeModule
   ],
   controllers: [AppController],
   providers: [AppService],
