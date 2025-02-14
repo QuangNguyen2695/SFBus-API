@@ -1,24 +1,33 @@
 import { Exclude, Expose } from "class-transformer";
 import { Types } from "mongoose";
 
-export class SeatTypeDto {
+export class BookingDto {
     @Expose()
     _id: Types.ObjectId;
 
     @Expose()
-    name: String;
+    userId: Types.ObjectId;
 
     @Expose()
-    icon: string;
+    busScheduleId: Types.ObjectId;
 
     @Expose()
-    blockIcon: string;
+    seats: Types.ObjectId[];
 
     @Expose()
-    selectedIcon: string;
+    departure: string;
 
     @Expose()
-    isChoose: boolean;
+    destination: string;
+
+    @Expose()
+    totalPrice: number;
+
+    @Expose()
+    status?: string;
+
+    @Expose()
+    paymentTime?: Date;
 
     @Exclude()
     createdAt: Date

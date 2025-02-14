@@ -34,6 +34,8 @@ export class BusScheduleRouteDto extends BusRouteDto {
 }
 
 export class BusScheduleDto {
+  @Expose()
+  _id: Types.ObjectId;
 
   @Expose()
   busId: Types.ObjectId;

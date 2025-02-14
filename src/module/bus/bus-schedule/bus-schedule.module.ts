@@ -15,5 +15,6 @@ import { BusModule } from '../bus/bus.module';
   ],
   controllers: [BusScheduleController],
   providers: [BusScheduleService],
+  exports: [BusScheduleService],
 })
 export class BusScheduleModule { }

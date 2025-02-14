@@ -34,12 +34,6 @@ export class CreateUserDto {
     email: string;
 
     @IsOptional()
-    @IsString()
-    @Matches(/^\d{10,15}$/, {
-        message: 'Số điện thoại không hợp lệ.',
-    })
-
-    @IsOptional()
     @IsEnum(['male', 'female', 'other'], {
         message: 'Giới tính phải là male, female hoặc other.',
     })

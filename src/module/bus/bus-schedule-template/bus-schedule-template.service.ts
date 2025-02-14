@@ -68,6 +68,39 @@ export class BusScheduleTemplateService {
         return updatedTemplate;
     }
 
+
+    async updateSeatStatus(
+        busScheduleTemplateId: Types.ObjectId,
+        seatIds: string[],
+        status: string,
+    ): Promise<boolean> {
+        const updatedTemplate = await this.busScheduleTemplateModel
+            .findById(busScheduleTemplateId)
+            .exec();
+
+        if (!updatedTemplate) {
+            throw new NotFoundException(`BusScheduleTemplate with ID "${busScheduleTemplateId}" not found.`);
+        }
+
+        const seatUpdatePromises = [];
+
+        updatedTemplate.seatLayouts.forEach((layout, layoutIndex) => {
+            layout.seats.forEach((seat, seatIndex) => {
+                if (seatIds.includes(seat._id.toString())) {
+                    seat.status = status;
+                    seatUpdatePromises.push(this.busScheduleTemplateModel.updateOne(
+                        { '_id': busScheduleTemplateId, [`seatLayouts.${layoutIndex}.seats._id`]: seat._id },
+                        { $set: { [`seatLayouts.${layoutIndex}.seats.${seatIndex}.status`]: status } }
+                    ).exec());
+                }
+            });
+        });
+
+
+        await Promise.all(seatUpdatePromises);
+        return true;
+    }
+
     async remove(id: string): Promise<void> {
         const result = await this.busScheduleTemplateModel.findByIdAndDelete(id).exec();
         if (!result) {

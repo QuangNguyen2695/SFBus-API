@@ -12,6 +12,7 @@ import { BusScheduleTemplateDocument, BusScheduleTemplateSchema } from './schema
     ],
     controllers: [BusScheduleTemplateController],
     providers: [BusScheduleTemplateService],
+    exports: [BusScheduleTemplateService],
 })
 
 export class BusScheduleTemplateModule { }

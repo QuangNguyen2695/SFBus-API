@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 
 export class BusTemplateSeatDto {
+    _id: Types.ObjectId;
     index: number;
     type: Types.ObjectId;
     name: string;
@@ -9,6 +10,7 @@ export class BusTemplateSeatDto {
 }
 
 export class BusTemplateSeatLayoutDto {
+    _id: Types.ObjectId;
     name: string;
     seats: BusTemplateSeatDto[];
 }
