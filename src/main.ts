@@ -1,10 +1,11 @@
 import { NestFactory } from '@nestjs/core';
-
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import { SizeLimitMiddleware } from './middleware/size-limit-middleware';
+import * as bodyParser from 'body-parser';
 import fastifyMultipart from '@fastify/multipart';
+import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -18,12 +19,17 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
   const port = configService.get('PORT');
+  // app.use(bodyParser.json({ limit: '500mb' }));
+  // app.use(bodyParser.urlencoded({ limit: '500mb', extended: true }));
 
   app.enableCors({
     origin: ['http://localhost:8100'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   });
+
+  // Apply Custom Middleware for Request Size
+  app.use(new SizeLimitMiddleware().use);
 
   await app.listen(port);
 }
