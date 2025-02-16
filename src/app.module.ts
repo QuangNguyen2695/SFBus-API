@@ -17,6 +17,8 @@ import { BusTypeModule } from './module/bus/bus-type/bus-type.module';
 import { BusScheduleTemplateModule } from './module/bus/bus-schedule-template/bus-schedule-template.module';
 import { SeatTypeModule } from './module/seat/seat-type/seat-type.module';
 import { BookingModule } from './module/booking/booking/booking.module';
+import { PaymentModule } from './module/booking/payment/payment.module';
+import { PaymentMethodModule } from './module/booking/payment-method/payment-method.module';
 
 @Module({
   imports: [
@@ -44,7 +46,9 @@ import { BookingModule } from './module/booking/booking/booking.module';
     AuthModule,
     BusModule,
     SeatTypeModule,
-    BookingModule
+    BookingModule,
+    PaymentModule,
+    PaymentMethodModule
   ],
   controllers: [AppController],
   providers: [AppService],

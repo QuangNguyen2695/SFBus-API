@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { BookingService } from './booking-service';
-import { CreateBookingDto } from './dto/create-bookingdto';
+import { CreateBookingDto } from './dto/create-booking.dto';
 import { Roles } from '@/decorators/roles.decorator';
 import { JwtAuthGuard } from '@/guards/jwt-auth.guard';
 import { RolesGuard } from '@/guards/roles.guard';
@@ -14,6 +14,14 @@ export class BookingController {
   @Post()
   create(@Body() createBookingDto: CreateBookingDto[]) {
     return this.bookingService.create(createBookingDto);
+  }
+
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('user')
+  @Post('cancel')
+  cancelBooking(@Body() BookingsDto: string[]) {
+    return this.bookingService.cancelBooking(BookingsDto);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

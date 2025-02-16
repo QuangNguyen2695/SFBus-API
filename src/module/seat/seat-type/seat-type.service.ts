@@ -8,20 +8,20 @@ import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class SeatTypeService {
-  constructor(@InjectModel(SeatTypeDocument.name) private readonly seatType: Model<SeatTypeDto>) { }
+  constructor(@InjectModel(SeatTypeDocument.name) private readonly seatTypeModel: Model<SeatTypeDocument>) { }
 
   async create(createSeatTypeDto: CreateSeatTypeDto): Promise<SeatTypeDto> {
-    const createSeatType = new this.seatType(createSeatTypeDto);
-    return createSeatType.save();
+    const createSeatType = new this.seatTypeModel(createSeatTypeDto);
+    return plainToInstance(SeatTypeDto, createSeatType.toObject());
   }
 
   async findAll(): Promise<SeatTypeDto[]> {
-    const SeatTypes = await this.seatType.find().lean().exec();
+    const SeatTypes = await this.seatTypeModel.find().lean().exec();
     return plainToInstance(SeatTypeDto, SeatTypes);
   }
 
   async findOne(id: string): Promise<SeatTypeDto> {
-    const SeatType = await this.seatType.findById(id).lean().exec();
+    const SeatType = await this.seatTypeModel.findById(id).lean().exec();
     return plainToInstance(SeatTypeDto, SeatType);
   }
 }

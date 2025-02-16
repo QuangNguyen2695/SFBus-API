@@ -28,7 +28,8 @@
     "seed:busScheduleTemplates": "ts-node -r tsconfig-paths/register src/seed/seed-busScheduleTemplates.ts",
     "seed:buses": "ts-node -r tsconfig-paths/register src/seed/seed-buses.ts",
     "seed:busSchedules": "ts-node -r tsconfig-paths/register src/seed/seed-busSchedules.ts",
-    "seed:seatTypes": "ts-node -r tsconfig-paths/register src/seed/seed-seatTypes.ts"
+    "seed:seatTypes": "ts-node -r tsconfig-paths/register src/seed/seed-seatTypes.ts",
+    "seed:paymentMethods": "ts-node -r tsconfig-paths/register src/seed/seed-paymentMethods.ts"
   },
   "dependencies": {
     "@fastify/multipart": "^9.0.3",

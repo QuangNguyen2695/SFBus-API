@@ -20,7 +20,7 @@ export class UploadService {
   private readonly bucket: any
 
   constructor(
-    @InjectModel(FileUploadDocument.name) private readonly fileModel: Model<FileUploadDto>,
+    @InjectModel(FileUploadDocument.name) private readonly fileModel: Model<FileUploadDocument>,
     @InjectConnection() private readonly connection: Connection,
   ) {
     if (!this.connection.db) {

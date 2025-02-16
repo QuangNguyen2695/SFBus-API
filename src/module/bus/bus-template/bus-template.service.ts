@@ -7,22 +7,25 @@ import { BusTemplateDocument } from './schema/bus-template.schema';
 import { BusTemplateDto } from './dto/bus-template.dto';
 import { CreateBusTemplateDto } from './dto/create-bus-template.dto';
 import { UpdateBusTemplateDto } from './dto/update-bus-template.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class BusTemplateService {
     constructor(
-        @InjectModel(BusTemplateDocument.name) private busTemplateModel: Model<BusTemplateDto>,
+        @InjectModel(BusTemplateDocument.name) private busTemplateModel: Model<BusTemplateDocument>,
     ) { }
 
     async create(createBusTemplateDto: CreateBusTemplateDto): Promise<BusTemplateDto> {
         const createdBusTemplate = new this.busTemplateModel({
             ...createBusTemplateDto,
         });
-        return createdBusTemplate.save();
+        const savedBusTemplate = await createdBusTemplate.save();
+        return plainToInstance(BusTemplateDto, savedBusTemplate.toObject());
     }
 
     async findAll(): Promise<BusTemplateDto[]> {
-        return this.busTemplateModel.find().populate('seatLayouts').exec();
+        const templates = await this.busTemplateModel.find().populate('seatLayouts').exec();
+        return templates.map(template => plainToInstance(BusTemplateDto, template.toObject()));
     }
 
     async findOne(id: string): Promise<BusTemplateDto> {
@@ -35,7 +38,7 @@ export class BusTemplateService {
             throw new NotFoundException(`BusTemplate with ID "${id}" not found.`);
         }
 
-        return template;
+        return plainToInstance(BusTemplateDto, template.toObject());
     }
 
     async update(
@@ -51,7 +54,7 @@ export class BusTemplateService {
             throw new NotFoundException(`BusTemplate with ID "${id}" not found.`);
         }
 
-        return updatedTemplate;
+        return plainToInstance(BusTemplateDto, updatedTemplate.toObject());
     }
 
     async remove(id: string): Promise<void> {
