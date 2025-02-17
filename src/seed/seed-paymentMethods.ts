@@ -12,13 +12,13 @@ async function bootstrap() {
             name: "Thẻ ATM",
             type: "card",
             status: true,
-            icon: "http://localhost:8080/upload/view/67b1f1420affdee75bed86fd"
+            icon: "http://192.168.1.6:8080/upload/view/67b1f1420affdee75bed86fd"
         },
         {
             name: "Thẻ Visa/Master/JCB",
             type: "card",
             status: true,
-            icon: "http://localhost:8080/upload/view/67b1f1420affdee75bed86fe"
+            icon: "http://192.168.1.6:8080/upload/view/67b1f1420affdee75bed86fe"
         },
         {
             name: "SFPay",
@@ -29,7 +29,7 @@ async function bootstrap() {
                 accountNumber: "123456789",
                 accountName: "SFPay"
             },
-            icon: "http://localhost:8080/upload/view/67b1f1420affdee75bed8700",
+            icon: "http://192.168.1.6:8080/upload/view/67b1f1420affdee75bed8700",
             isDefault: true
         },
         {
@@ -41,7 +41,7 @@ async function bootstrap() {
                 accountNumber: "123456789",
                 accountName: "Momo"
             },
-            icon: "http://localhost:8080/upload/view/67b1f1420affdee75bed86ff"
+            icon: "http://192.168.1.6:8080/upload/view/67b1f1420affdee75bed86ff"
         },
         {
             name: "ZaloPay",
@@ -52,7 +52,7 @@ async function bootstrap() {
                 accountNumber: "123456789",
                 accountName: "ZaloPay"
             },
-            icon: "http://localhost:8080/upload/view/67b1f1420affdee75bed8702"
+            icon: "http://192.168.1.6:8080/upload/view/67b1f1420affdee75bed8702"
         },
         {
             name: "VNPay",
@@ -63,7 +63,7 @@ async function bootstrap() {
                 accountNumber: "123456789",
                 accountName: "VNPay"
             },
-            icon: "http://localhost:8080/upload/view/67b1f1420affdee75bed8701"
+            icon: "http://192.168.1.6:8080/upload/view/67b1f1420affdee75bed8701"
         },
     ]
 

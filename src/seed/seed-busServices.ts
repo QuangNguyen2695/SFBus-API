@@ -7,9 +7,9 @@ async function bootstrap() {
     const busServiceService = app.get(BusServiceService);
 
     const busServices = [
-        { name: "Water", icon: "http://localhost:8080/upload/view/67a3754584bc6c37fdbb9bd7" },
-        { name: "Wifi", icon: "http://localhost:8080/upload/view/67a3754584bc6c37fdbb9bd9" },
-        { name: "Towel", icon: "http://localhost:8080/upload/view/67a3754584bc6c37fdbb9bd8" },
+        { name: "Water", icon: "http://192.168.1.6:8080/upload/view/67a3754584bc6c37fdbb9bd7" },
+        { name: "Wifi", icon: "http://192.168.1.6:8080/upload/view/67a3754584bc6c37fdbb9bd9" },
+        { name: "Towel", icon: "http://192.168.1.6:8080/upload/view/67a3754584bc6c37fdbb9bd8" },
     ];
 
     for (const busService of busServices) {

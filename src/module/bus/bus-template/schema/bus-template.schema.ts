@@ -13,9 +13,6 @@ export class BusTemplateSeatDocument extends Document {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true })
-  icon: string;
-
   @Prop({ required: true, default: 'available' })
   status: string;
 }

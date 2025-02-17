@@ -83,7 +83,8 @@ export class BusScheduleService {
     const filteredSchedules = schedules.filter(schedule => {
       const departureIndex = schedule.busRoute.breakPoints.findIndex(point => point.busStationId.equals(new Types.ObjectId(query.departureId)));
       const destinationIndex = schedule.busRoute.breakPoints.findIndex(point => point.busStationId.equals(new Types.ObjectId(query.destinationId)));
-      return departureIndex !== -1 && destinationIndex !== -1 && departureIndex < destinationIndex;
+      const isRemainSeat = schedule.remainSeat > 0;
+      return departureIndex !== -1 && destinationIndex !== -1 && departureIndex < destinationIndex && isRemainSeat;
     });
 
     const busSchedules = await Promise.all(filteredSchedules.map(async (busSchedule) => {

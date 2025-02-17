@@ -9,21 +9,21 @@ async function bootstrap() {
     const SeatTypes = [
         {
             name: "Ghế",
-            icon: "http://localhost:8080/upload/view/67a9e33b84b85d1c30199dc7",
-            blockIcon: "http://localhost:8080/upload/view/67a9e33b84b85d1c30199dc8",
-            selectedIcon: "http://localhost:8080/upload/view/67a9e33b84b85d1c30199dc9",
+            icon: "http://192.168.1.6/upload/view/67a9e33b84b85d1c30199dc7",
+            blockIcon: "http://192.168.1.6/upload/view/67a9e33b84b85d1c30199dc8",
+            selectedIcon: "http://192.168.1.6/upload/view/67a9e33b84b85d1c30199dc9",
             isChoose: true,
         },
         {
             name: "Hành lang",
-            icon: "http://localhost:8080/upload/view/67a9e33b84b85d1c30199dca",
+            icon: "http://192.168.1.6/upload/view/67a9e33b84b85d1c30199dca",
             blockIcon: "",
             selectedIcon: "",
             isChoose: false,
         },
         {
             name: "Tài xế",
-            icon: "http://localhost:8080/upload/view/67a9e33b84b85d1c30199dc6",
+            icon: "http://192.168.1.6/upload/view/67a9e33b84b85d1c30199dc6",
             blockIcon: "",
             selectedIcon: "",
             isChoose: false,

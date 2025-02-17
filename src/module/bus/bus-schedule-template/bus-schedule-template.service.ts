@@ -89,7 +89,7 @@ export class BusScheduleTemplateService {
 
         updatedTemplate.seatLayouts.forEach((layout, layoutIndex) => {
             layout.seats.forEach((seat: any, seatIndex) => {
-                const isSeatIncluded = seats.some(seat => seat._id.toString() === seat._id.toString());
+                const isSeatIncluded = seats.some(s => s._id.toString() === seat._id.toString());
                 if (isSeatIncluded) {
                     seat.status = status;
                     seatUpdatePromises.push(this.busScheduleTemplateModel.updateOne(

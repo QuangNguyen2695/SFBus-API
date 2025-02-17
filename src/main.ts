@@ -31,6 +31,6 @@ async function bootstrap() {
   // Apply Custom Middleware for Request Size
   app.use(new SizeLimitMiddleware().use);
 
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
 }
 bootstrap();

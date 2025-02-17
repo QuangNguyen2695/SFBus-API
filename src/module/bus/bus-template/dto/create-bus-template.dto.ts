@@ -4,7 +4,6 @@ export class CreateBusTemplateSeatDto {
     index: number;
     type: Types.ObjectId;
     name: string;
-    icon: string;
     status: string;
 }
 
