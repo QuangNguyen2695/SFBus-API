@@ -3,5 +3,4 @@ import { Types } from 'mongoose';
 import { CreateBookingDto } from './create-booking.dto';
 
 export class UpdateBookingDto extends PartialType(CreateBookingDto) {
-    _id: Types.ObjectId;
 }

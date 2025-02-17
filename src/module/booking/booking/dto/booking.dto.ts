@@ -1,5 +1,16 @@
+import { BusScheduleBusDto, BusScheduleDto } from "@/module/bus/bus-schedule/dto/bus-schedule.dto";
+import { BusTemplateSeatDto } from "@/module/bus/bus-template/dto/bus-template.dto";
 import { Exclude, Expose } from "class-transformer";
 import { Types } from "mongoose";
+
+export class BookingSeatDto {
+    @Expose()
+    _id: Types.ObjectId;
+
+    @Expose()
+    name: string;
+}
+
 
 export class BookingDto {
     @Expose()
@@ -12,7 +23,10 @@ export class BookingDto {
     busScheduleId: Types.ObjectId;
 
     @Expose()
-    seats: Types.ObjectId[];
+    busSchedule: BusScheduleDto;
+
+    @Expose()
+    seats: BookingSeatDto[];
 
     @Expose()
     departure: string;

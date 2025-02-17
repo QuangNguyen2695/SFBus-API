@@ -1,16 +1,22 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { BookingDocument } from './schema/booking.schema';
-import { plainToInstance } from 'class-transformer';
+import { plainToInstance, Type } from 'class-transformer';
 import { BookingDto } from './dto/booking.dto';
 import { BusScheduleTemplateService } from '@/module/bus/bus-schedule-template/bus-schedule-template.service';
 import { BusScheduleService } from '@/module/bus/bus-schedule/bus-schedule.service';
 import { UpdateBusScheduleDto } from '@/module/bus/bus-schedule/dto/update-bus-schedule.dto';
+import { UpdateBookingDto } from './dto/update-booking.dto';
+import { customAlphabet } from 'nanoid';
 
 @Injectable()
 export class BookingService {
+
+  private alphabet = process.env.ALPHABET || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  private nanoid = customAlphabet(this.alphabet, 6);
+
   constructor(
     @InjectModel(BookingDocument.name) private readonly bookingModel: Model<BookingDocument>,
     private readonly busScheduleTemplateService: BusScheduleTemplateService,
@@ -18,10 +24,12 @@ export class BookingService {
   ) { }
 
   async create(createBookingDto: CreateBookingDto[]): Promise<BookingDto[]> {
+    console.log("🚀 ~ BookingService ~ create ~ createBookingDto:", createBookingDto)
     const bookingPromises = createBookingDto.map(async (booking) => {
       const createBooking = new this.bookingModel({
         ...booking,
         status: 'pending',
+        bookingNumber: this.generateBookingNumber(),
         paymentTime: new Date(Date.now() + 10 * 60 * 1000) // 10 minutes from now
       });
 
@@ -44,6 +52,14 @@ export class BookingService {
 
     const createdBookings = await Promise.all(bookingPromises);
     return plainToInstance(BookingDto, createdBookings);
+  }
+
+  async update(id: string, updateBookingDto: UpdateBookingDto): Promise<BookingDto> {
+    const updateBooking = await this.bookingModel.findByIdAndUpdate(id, updateBookingDto, { new: true }).exec();
+    if (!updateBooking) {
+      throw new NotFoundException(`payment with ID "${id}" not found.`);
+    }
+    return plainToInstance(BookingDto, updateBooking.toObject());
   }
 
 
@@ -91,5 +107,25 @@ export class BookingService {
     return result !== null;
   }
 
+  async findByUserId(userId: string): Promise<BookingDto[]> {
+    const bookingModel = await this.bookingModel.find({ userId }).lean().exec();
 
+    const booking = plainToInstance(BookingDto, bookingModel);
+
+    if (!booking) {
+      return [];
+    }
+
+    const bookingPromises = booking.map(async (booking) => {
+      booking.busSchedule = await this.busScheduleService.findOne(booking.busScheduleId);
+      return booking;
+    });
+
+
+    return await Promise.all(bookingPromises);
+  }
+
+  generateBookingNumber(): string {
+    return this.nanoid();
+  }
 }

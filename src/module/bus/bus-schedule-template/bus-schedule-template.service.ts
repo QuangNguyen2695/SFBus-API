@@ -8,6 +8,7 @@ import { CreateBusScheduleTemplateDto } from './dto/create-bus-schedule-template
 import { BusScheduleTemplateDto } from './dto/bus-schedule-template.dto';
 import { UpdateBusScheduleTemplateDto } from './dto/update-bus-schedule-template.dto';
 import { plainToInstance } from 'class-transformer';
+import { BookingSeatDto } from '@/module/booking/booking/dto/create-booking.dto';
 
 @Injectable()
 export class BusScheduleTemplateService {
@@ -73,7 +74,7 @@ export class BusScheduleTemplateService {
 
     async updateSeatStatus(
         busScheduleTemplateId: Types.ObjectId,
-        seatIds: string[],
+        seats: BookingSeatDto[],
         status: string,
     ): Promise<boolean> {
         const updatedTemplate = await this.busScheduleTemplateModel
@@ -88,7 +89,8 @@ export class BusScheduleTemplateService {
 
         updatedTemplate.seatLayouts.forEach((layout, layoutIndex) => {
             layout.seats.forEach((seat: any, seatIndex) => {
-                if (seatIds.includes(seat._id.toString())) {
+                const isSeatIncluded = seats.some(seat => seat._id.toString() === seat._id.toString());
+                if (isSeatIncluded) {
                     seat.status = status;
                     seatUpdatePromises.push(this.busScheduleTemplateModel.updateOne(
                         { '_id': busScheduleTemplateId, [`seatLayouts.${layoutIndex}.seats._id`]: seat._id },

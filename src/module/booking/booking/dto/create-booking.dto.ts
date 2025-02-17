@@ -1,20 +1,25 @@
 import { Types } from "mongoose";
 
+export class BookingSeatDto {
+    _id: Types.ObjectId;
+    name: string;
+}
+
 export class CreateBookingDto {
     busScheduleId: Types.ObjectId;
 
     userId: Types.ObjectId;
 
-    seats: string[];
+    seats: BookingSeatDto[];
 
-    departure: string;
+    departure: Types.ObjectId;
 
-    destination: string;
+    destination: Types.ObjectId;
 
     totalPrice: number;
 
     paymentTime?: Date;
 
-    status?: boolean;
+    status?: string;
 }
 

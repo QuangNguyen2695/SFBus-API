@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
 import { BookingService } from './booking-service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { Roles } from '@/decorators/roles.decorator';
 import { JwtAuthGuard } from '@/guards/jwt-auth.guard';
 import { RolesGuard } from '@/guards/roles.guard';
+import { ParseObjectIdPipe } from '@/pipe/parse-objectId.pipe';
 
 @Controller('booking')
 export class BookingController {
@@ -12,7 +13,7 @@ export class BookingController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('user')
   @Post()
-  create(@Body() createBookingDto: CreateBookingDto[]) {
+  create(@Body(ParseObjectIdPipe) createBookingDto: CreateBookingDto[]) {
     return this.bookingService.create(createBookingDto);
   }
 
@@ -29,5 +30,14 @@ export class BookingController {
   @Get()
   findAll() {
     return this.bookingService.findAll();
+  }
+
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('user')
+  @Get('find-by-user')
+  findByUser(@Request() req) {
+    const userId = req.user._id;
+    return this.bookingService.findByUserId(userId);
   }
 }

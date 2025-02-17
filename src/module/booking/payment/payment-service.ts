@@ -6,16 +6,23 @@ import { PaymentDocument } from './schema/payment.schema';
 import { PaymentDto } from './dto/payment.dto';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { BookingService } from '../booking/booking-service';
 
 @Injectable()
 export class PaymentService {
   constructor(
     @InjectModel(PaymentDocument.name) private readonly paymentModel: Model<PaymentDocument>,
+    private bookingService: BookingService,
   ) { }
 
   async create(createPaymentDto: CreatePaymentDto): Promise<PaymentDto> {
     const createPayment = new this.paymentModel(createPaymentDto);
     createPayment.status = 'Sucesss';
+
+    createPayment.bookingIds.forEach(async (bookingId) => {
+      this.bookingService.update(bookingId.toString(), { status: 'paid' });
+    });
+
     const savedPayment = await createPayment.save();
     return plainToInstance(PaymentDto, savedPayment.toObject());
   }
