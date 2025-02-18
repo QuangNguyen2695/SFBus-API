@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types, Document } from 'mongoose';
 import { BusRouteBreakPointsDocument, BusRouteDocument } from '../../bus-route/schema/bus-route.schema';
+import { BusProvinceDocument } from '../../bus-province/schema/bus-schema.schema';
 
 export class BusScheduleRouteDocument extends BusRouteDocument {
     @Prop({ required: true })
@@ -13,6 +14,9 @@ export class BusRouteScheduleBreakPointsDocument extends BusRouteBreakPointsDocu
 
     @Prop({ required: true })
     provinceId: Types.ObjectId;
+
+    @Prop({ required: true })
+    province: BusProvinceDocument;
 
     @Prop({ required: true })
     name: string;

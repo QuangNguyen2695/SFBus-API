@@ -8,7 +8,7 @@ import { CreateBusScheduleTemplateDto } from './dto/create-bus-schedule-template
 import { BusScheduleTemplateDto } from './dto/bus-schedule-template.dto';
 import { UpdateBusScheduleTemplateDto } from './dto/update-bus-schedule-template.dto';
 import { plainToInstance } from 'class-transformer';
-import { BookingSeatDto } from '@/module/booking/booking/dto/create-booking.dto';
+import { CreateBookingSeatDto } from '@/module/booking/booking/dto/create-booking.dto';
 
 @Injectable()
 export class BusScheduleTemplateService {
@@ -74,7 +74,7 @@ export class BusScheduleTemplateService {
 
     async updateSeatStatus(
         busScheduleTemplateId: Types.ObjectId,
-        seats: BookingSeatDto[],
+        seats: CreateBookingSeatDto[],
         status: string,
     ): Promise<boolean> {
         const updatedTemplate = await this.busScheduleTemplateModel

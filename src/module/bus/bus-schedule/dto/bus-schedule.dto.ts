@@ -3,10 +3,14 @@ import { IsNotEmpty, IsString } from 'class-validator';
 import { Exclude, Expose, Type } from 'class-transformer';
 import { BusDto } from '../../bus/dto/bus.dto';
 import { BusRouteDto } from '../../bus-route/dto/bus-route.dto';
+import { BusProvinceDto } from '../../bus-province/dto/bus-province.dto';
 
-export class BreakPointsTimeDto {
+export class BusScheduleBreakPointsTimeDto {
   @Expose()
   busStationId: Types.ObjectId;
+
+  @Expose()
+  province: BusProvinceDto;
 
   @Expose()
   name: string;
@@ -30,7 +34,7 @@ export class BusScheduleBusDto extends BusDto {
 
 
 export class BusScheduleRouteDto extends BusRouteDto {
-
+  breakPoints: BusScheduleBreakPointsTimeDto[]
 }
 
 export class BusScheduleDto {

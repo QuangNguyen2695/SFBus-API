@@ -8,19 +8,21 @@ export class BookingSeatDto {
     _id: Types.ObjectId;
 
     @Expose()
+    seatNumber: string;
+
+    @Expose()
     name: string;
+
+    @Expose()
+    price: number;
 }
 
-
-export class BookingDto {
-    @Expose()
-    _id: Types.ObjectId;
-
-    @Expose()
-    userId: Types.ObjectId;
-
+export class BookingItemDto {
     @Expose()
     busScheduleId: Types.ObjectId;
+
+    @Expose()
+    type: string;
 
     @Expose()
     busSchedule: BusScheduleDto;
@@ -33,6 +35,24 @@ export class BookingDto {
 
     @Expose()
     destination: string;
+
+    @Expose()
+    price: number;
+}
+
+
+export class BookingDto {
+    @Expose()
+    _id: Types.ObjectId;
+
+    @Expose()
+    bookingNumber: string;
+
+    @Expose()
+    bookingItems: BookingItemDto[]
+
+    @Expose()
+    userId: Types.ObjectId;
 
     @Expose()
     totalPrice: number;

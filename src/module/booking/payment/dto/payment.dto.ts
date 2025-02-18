@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 
 export class PaymentDto {
     @Expose()
-    bookingIds: Types.ObjectId[];
+    bookingId: Types.ObjectId;
 
     @Expose()
     userId: Types.ObjectId;

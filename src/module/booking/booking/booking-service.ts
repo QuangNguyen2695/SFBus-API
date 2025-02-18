@@ -3,38 +3,45 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { BookingDocument } from './schema/booking.schema';
-import { plainToInstance, Type } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { BookingDto } from './dto/booking.dto';
 import { BusScheduleTemplateService } from '@/module/bus/bus-schedule-template/bus-schedule-template.service';
 import { BusScheduleService } from '@/module/bus/bus-schedule/bus-schedule.service';
-import { UpdateBusScheduleDto } from '@/module/bus/bus-schedule/dto/update-bus-schedule.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { customAlphabet } from 'nanoid';
+import { CounterService } from '@/module/counter/counter-service';
 
 @Injectable()
 export class BookingService {
 
-  private alphabet = process.env.ALPHABET || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  private alphabet = process.env.ALPHABET || 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   private nanoid = customAlphabet(this.alphabet, 6);
 
   constructor(
     @InjectModel(BookingDocument.name) private readonly bookingModel: Model<BookingDocument>,
     private readonly busScheduleTemplateService: BusScheduleTemplateService,
     private readonly busScheduleService: BusScheduleService,
+    private readonly counterService: CounterService
   ) { }
 
-  async create(createBookingDto: CreateBookingDto[]): Promise<BookingDto[]> {
-    console.log("🚀 ~ BookingService ~ create ~ createBookingDto:", createBookingDto)
-    const bookingPromises = createBookingDto.map(async (booking) => {
-      const createBooking = new this.bookingModel({
-        ...booking,
-        status: 'pending',
-        bookingNumber: this.generateBookingNumber(),
-        paymentTime: new Date(Date.now() + 10 * 60 * 1000) // 10 minutes from now
-      });
+  async create(createBooking: CreateBookingDto): Promise<BookingDto> {
+    if (!createBooking) {
+      throw new NotFoundException('createBooking not found');
+    }
 
+    const createBookingModel = new this.bookingModel({
+      ...createBooking,
+      status: 'pending',
+      bookingNumber: this.generateBookingNumber(),
+      totalPrice: 0,
+      paymentTime: new Date(Date.now() + 10 * 60 * 1000) // 10 minutes from now
+    });
+
+    const bookingPromises = createBookingModel.bookingItems.map(async (booking) => {
       const busSchedule = await this.busScheduleService.findOne(booking.busScheduleId);
       busSchedule.remainSeat -= booking.seats.length;
+
+      createBookingModel.totalPrice += booking.price;
 
       const updateBusScheduleResult = await this.busScheduleService.update(busSchedule._id, busSchedule);
       if (!updateBusScheduleResult) {
@@ -46,12 +53,21 @@ export class BookingService {
         throw new NotFoundException('Update seats failed');
       }
 
-      await createBooking.save();
-      return createBooking.toObject(); // Convert to plain JavaScript obje
+      booking.seats = await Promise.all(booking.seats.map(async (seat: any) => {
+        const seatNumber = await this.counterService.getNextSeatNumber();
+        return {
+          ...seat,
+          seatNumber, // Use the auto-incrementing seat number
+        };
+      }));
+
+      return booking;
     });
 
-    const createdBookings = await Promise.all(bookingPromises);
-    return plainToInstance(BookingDto, createdBookings);
+    await Promise.all(bookingPromises);
+    await createBookingModel.save();
+
+    return plainToInstance(BookingDto, createBookingModel.toObject());
   }
 
   async update(id: string, updateBookingDto: UpdateBookingDto): Promise<BookingDto> {
@@ -62,44 +78,45 @@ export class BookingService {
     return plainToInstance(BookingDto, updateBooking.toObject());
   }
 
+  async cancelBooking(userId: Types.ObjectId, bookingId: Types.ObjectId): Promise<boolean> {
 
-  async cancelBooking(BookingsDto: string[]): Promise<boolean> {
+    const booking = await this.bookingModel.findOne({ userId, _id: bookingId }).lean().exec();
+    if (!booking) {
+      throw new NotFoundException(`Booking with ID "${bookingId}" not found.`);
+    }
 
-    const bookingPromises = BookingsDto.map(async (booking) => {
-      this.bookingModel.findById(booking).exec().then(async (booking: any) => {
+    const bookingPromises = booking.bookingItems.map(async (bookingItem) => {
 
-        // Update bus schedule
-        const busSchedule = await this.busScheduleService.findOne(booking.busScheduleId);
-        busSchedule.remainSeat += booking.seats.length;
+      // Update bus schedule
+      const busSchedule = await this.busScheduleService.findOne(bookingItem.busScheduleId);
+      busSchedule.remainSeat += bookingItem.seats.length;
 
-        const updateBusScheduleResult = await this.busScheduleService.update(busSchedule._id, busSchedule);
-        if (!updateBusScheduleResult) {
-          throw new NotFoundException('Update bus schedule failed');
-        }
+      const updateBusScheduleResult = await this.busScheduleService.update(busSchedule._id, busSchedule);
+      if (!updateBusScheduleResult) {
+        throw new NotFoundException('Update bus schedule failed');
+      }
 
-        // Update seat status
-        const updateSeatStatusResult = await this.busScheduleTemplateService.updateSeatStatus(busSchedule.busScheduleTemplateId, booking.seats, 'available');
-        if (!updateSeatStatusResult) {
-          throw new NotFoundException('Update seats failed');
-        }
+      // Update seat status
+      const updateSeatStatusResult = await this.busScheduleTemplateService.updateSeatStatus(busSchedule.busScheduleTemplateId, bookingItem.seats, 'available');
+      if (!updateSeatStatusResult) {
+        throw new NotFoundException('Update seats failed');
+      }
 
-        return this.deleteOne(booking);
-      });
+      await this.bookingModel.findByIdAndDelete(bookingId).exec();
     });
 
     await Promise.all(bookingPromises);
     return true;
   }
 
-
   async findAll(): Promise<BookingDto[]> {
-    const Bookings = await this.bookingModel.find().lean().exec();
-    return plainToInstance(BookingDto, Bookings);
+    const bookings = await this.bookingModel.find().lean().exec();
+    return plainToInstance(BookingDto, bookings);
   }
 
   async findOne(id: string): Promise<BookingDto> {
-    const Booking = await this.bookingModel.findById(id).lean().exec();
-    return plainToInstance(BookingDto, Booking);
+    const booking = await this.bookingModel.findById(id).lean().exec();
+    return plainToInstance(BookingDto, booking);
   }
 
   async deleteOne(id: string): Promise<boolean> {
@@ -107,22 +124,41 @@ export class BookingService {
     return result !== null;
   }
 
-  async findByUserId(userId: string): Promise<BookingDto[]> {
+  async findAllByUser(userId: string): Promise<BookingDto[]> {
     const bookingModel = await this.bookingModel.find({ userId }).lean().exec();
+
+    const bookings = plainToInstance(BookingDto, bookingModel);
+
+    if (!bookings) {
+      return [];
+    }
+
+    const bookingPromises = bookings.map(async (booking) => {
+      booking.bookingItems = await Promise.all(booking.bookingItems.map(async (bookingItem) => {
+        bookingItem.busSchedule = await this.busScheduleService.findOne(bookingItem.busScheduleId);
+        return bookingItem;
+      }));
+      return booking;
+    });
+
+    return await Promise.all(bookingPromises);
+  }
+
+  async findOneByIdAndUser(userId: Types.ObjectId, bookingId: Types.ObjectId): Promise<BookingDto | null> {
+    const bookingModel = await this.bookingModel.findOne({ userId, _id: bookingId }).lean().exec();
 
     const booking = plainToInstance(BookingDto, bookingModel);
 
     if (!booking) {
-      return [];
+      return null;
     }
 
-    const bookingPromises = booking.map(async (booking) => {
-      booking.busSchedule = await this.busScheduleService.findOne(booking.busScheduleId);
-      return booking;
+    const bookingPromises = booking.bookingItems.map(async (bookingItem) => {
+      bookingItem.busSchedule = await this.busScheduleService.findOne(bookingItem.busScheduleId);
+      return bookingItem;
     });
-
-
-    return await Promise.all(bookingPromises);
+    await Promise.all(bookingPromises);
+    return booking;
   }
 
   generateBookingNumber(): string {

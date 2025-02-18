@@ -1,13 +1,12 @@
 import { IsNotEmpty, IsOptional, IsEnum, ValidateNested } from 'class-validator';
 import { Types } from 'mongoose';
 import { CreateBusRouteBreakPointsDto, CreateBusRouteDto } from '../../bus-route/dto/create-bus-route.dto';
+import { BusProvinceDto } from '../../bus-province/dto/bus-province.dto';
 
-export class CreateBusScheduleBreakPointsTimeDto {
-  @IsNotEmpty()
-  busStationId: Types.ObjectId;
-
+export class CreateBusScheduleBreakPointsTimeDto extends CreateBusRouteBreakPointsDto {
   @IsNotEmpty()
   name: string
+
   @IsNotEmpty()
   detailAddress: string
 
@@ -16,20 +15,15 @@ export class CreateBusScheduleBreakPointsTimeDto {
   @IsNotEmpty()
   provinceId: Types.ObjectId
 
+  @IsNotEmpty()
+  province: BusProvinceDto;
+
   @IsOptional()
   timeSchedule?: Date;
 }
 
-export class CreateBusRouteScheduleBreakPointsDto extends CreateBusRouteBreakPointsDto {
-  timeSchedule: Date;
-  provinceId: Types.ObjectId;
-  name: string;
-  detailAddress: string;
-  location: string;
-}
-
 export class CreateBusRouteScheduleDto extends CreateBusRouteDto {
-  breakPoints: CreateBusRouteScheduleBreakPointsDto[];
+  breakPoints: CreateBusScheduleBreakPointsTimeDto[];
 }
 
 export class CreateBusScheduleDto {

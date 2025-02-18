@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 
 export class CreatePaymentDto {
-    bookingIds: Types.ObjectId[];
+    bookingId: Types.ObjectId;
 
     userId: Types.ObjectId;
 

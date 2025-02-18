@@ -6,19 +6,22 @@ export class BookingSeatDocument extends Document {
     _id: Types.ObjectId;
 
     @Prop({ required: true })
+    seatNumber: string;
+
+    @Prop({ required: true })
     name: string;
+
+    @Prop({ required: true })
+    price: number;
 }
 
-@Schema({ collection: 'bookings', timestamps: true })
-export class BookingDocument extends Document {
-    @Prop({ required: true })
-    bookingNumber: string;
 
+export class bookingItemDocument extends Document {
     @Prop({ required: true })
     busScheduleId: Types.ObjectId;
 
     @Prop({ required: true })
-    userId: Types.ObjectId;
+    type: string;
 
     @Prop({ required: true })
     seats: BookingSeatDocument[];
@@ -29,6 +32,20 @@ export class BookingDocument extends Document {
     @Prop({ required: true })
     destination: Types.ObjectId
 
+    @Prop({ required: true })
+    price: number;
+}
+
+@Schema({ collection: 'bookings', timestamps: true })
+export class BookingDocument extends Document {
+    @Prop({ required: true })
+    bookingNumber: string;
+
+    @Prop({ required: true })
+    bookingItems: bookingItemDocument[]
+
+    @Prop({ required: true })
+    userId: Types.ObjectId;
 
     @Prop({ required: true })
     totalPrice: number;

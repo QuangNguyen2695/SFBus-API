@@ -19,9 +19,7 @@ export class PaymentService {
     const createPayment = new this.paymentModel(createPaymentDto);
     createPayment.status = 'Sucesss';
 
-    createPayment.bookingIds.forEach(async (bookingId) => {
-      this.bookingService.update(bookingId.toString(), { status: 'paid' });
-    });
+    this.bookingService.update(createPayment.bookingId.toString(), { status: 'paid' });
 
     const savedPayment = await createPayment.save();
     return plainToInstance(PaymentDto, savedPayment.toObject());

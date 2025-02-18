@@ -4,7 +4,7 @@ import { Document, Types } from 'mongoose';
 @Schema({ collection: 'payments', timestamps: true })
 export class PaymentDocument extends Document {
     @Prop({ required: true })
-    bookingIds: Types.ObjectId[];
+    bookingId: Types.ObjectId;
 
     @Prop({ required: true })
     userId: Types.ObjectId;
