@@ -1,6 +1,11 @@
 import { Exclude, Expose } from "class-transformer";
 import { Types } from "mongoose";
 
+export class UserAddressDto {
+    addressType: string;
+    address: string
+}
+
 export class UserDto {
 
     @Expose()
@@ -13,7 +18,7 @@ export class UserDto {
     name: string;
 
     @Expose()
-    address?: string;
+    addresses?: UserAddressDto[];
 
     @Expose()
     gender: string;

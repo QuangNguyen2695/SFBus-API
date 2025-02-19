@@ -10,6 +10,12 @@ import {
     IsBoolean,
 } from 'class-validator';
 
+
+export class CreateUserAddressDto {
+    addressType: string;
+    address: string
+}
+
 export class CreateUserDto {
 
     @IsNotEmpty()
@@ -26,8 +32,7 @@ export class CreateUserDto {
     name: string;
 
     @IsOptional()
-    @IsString()
-    address?: string;
+    addresses?: CreateUserAddressDto[];
 
     @IsOptional()
     @IsEmail()

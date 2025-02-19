@@ -19,6 +19,7 @@ import { SeatTypeModule } from './module/seat/seat-type/seat-type.module';
 import { BookingModule } from './module/booking/booking/booking.module';
 import { PaymentModule } from './module/booking/payment/payment.module';
 import { PaymentMethodModule } from './module/booking/payment-method/payment-method.module';
+import { NotificationModule } from './module/notification/notification.module';
 
 @Module({
   imports: [
@@ -48,7 +49,8 @@ import { PaymentMethodModule } from './module/booking/payment-method/payment-met
     SeatTypeModule,
     BookingModule,
     PaymentModule,
-    PaymentMethodModule
+    PaymentMethodModule,
+    NotificationModule
   ],
   controllers: [AppController],
   providers: [AppService],

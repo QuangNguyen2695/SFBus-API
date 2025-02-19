@@ -48,14 +48,11 @@ export class UserController {
   @Put('profile')
   async updateProfile(@Request() req, @Body() updateUserDto: UpdateUserDto) {
     try {
-      const userId = req.user.userId;
+      const userId = req.user._id;
       const updatedUser = await this.userService.update(userId, updateUserDto);
       return {
         message: 'Cập nhật thông tin thành công!',
-        user: {
-          email: updatedUser.email,
-          name: updatedUser.name,
-        },
+        user: updatedUser
       };
     } catch (error) {
       throw new BadRequestException(error.message);

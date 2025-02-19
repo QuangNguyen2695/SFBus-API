@@ -3,6 +3,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
+
+export class UserAddressDocument extends Document {
+  type: string;
+  addressType: string
+}
+
 @Schema({ collection: 'users', timestamps: true })
 export class UserDocument extends Document {
   @Prop({ required: true, unique: true })
@@ -15,7 +21,7 @@ export class UserDocument extends Document {
   name: string;
 
   @Prop()
-  address?: string;
+  addresses?: UserAddressDocument[];
 
   @Prop({ enum: ['male', 'female', 'other'], default: 'other' })
   gender: string;
